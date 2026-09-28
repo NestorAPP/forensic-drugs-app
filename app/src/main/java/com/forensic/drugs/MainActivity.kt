@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.forensic.drugs.ui.screens.SearchScreen
 import com.forensic.drugs.ui.screens.SizeScreen
 import com.forensic.drugs.ui.theme.ForensicDrugsTheme
 import com.forensic.drugs.ui.theme.GreenSectionCard
@@ -89,7 +90,7 @@ fun MainScreen() {
                 .padding(padding)
         ) {
             when (selectedTab) {
-                0 -> PlaceholderScreen("Поиск вещества", "Введите название, формулу или описание — поиск по перечням №681, №964, №1002")
+                0 -> SearchScreen()
                 1 -> SizeScreen()
                 2 -> PlaceholderScreen("Статьи УК РФ", "Ст. 228–234: санкции, подсказки, разграничение составов")
                 3 -> PlaceholderScreen("Запрещённые растения", "Перечень растений и расчёт размера культивирования (ст. 231)")
