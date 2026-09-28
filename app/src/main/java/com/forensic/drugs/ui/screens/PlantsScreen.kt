@@ -15,7 +15,6 @@ import com.forensic.drugs.data.PlantsRepository
 import com.forensic.drugs.ui.theme.GreenHeader
 import com.forensic.drugs.ui.theme.GreenSectionCard
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantsScreen() {
     var selected by remember { mutableStateOf<Plant?>(null) }
@@ -27,16 +26,25 @@ fun PlantsScreen() {
             .verticalScroll(scrollState)
     ) {
         GreenHeader(
-            title = "Запрещённые растения",
-            subtitle = "Постановление № 1002 от 01.10.2012. Ст. 231 УК РФ"
+            title = "Растения",
+            subtitle = "Постановления № 1002 и № 934 + смежные виды"
         )
 
         Spacer(Modifier.height(8.dp))
 
         if (selected == null) {
-            PlantsRepository.plants.forEach { plant ->
+            SectionTitle("Официальный перечень (Постановления № 1002 и № 934)")
+            PlantsRepository.plants.filter { it.inOfficialList }.forEach { plant ->
                 PlantListCard(plant) { selected = it }
             }
+
+            Spacer(Modifier.height(12.dp))
+
+            SectionTitle("Смежные растения (не в перечне)")
+            PlantsRepository.plants.filter { !it.inOfficialList }.forEach { plant ->
+                PlantListCard(plant) { selected = it }
+            }
+
             Spacer(Modifier.height(16.dp))
         } else {
             selected?.let { plant ->
@@ -55,23 +63,56 @@ fun PlantsScreen() {
 }
 
 @Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary
+    )
+}
+
+@Composable
 private fun PlantListCard(plant: Plant, onClick: (Plant) -> Unit) {
+    val cardColor = if (plant.inOfficialList) {
+        MaterialTheme.colorScheme.surface
+    } else {
+        MaterialTheme.colorScheme.surfaceVariant
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = cardColor),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         onClick = { onClick(plant) }
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
-            Text(
-                plant.name,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Text(
+                    plant.name,
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                if (!plant.inOfficialList) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+                        shape = RoundedCornerShape(6.dp)
+                    ) {
+                        Text(
+                            "вне перечня",
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
             Text(
                 plant.latinName,
                 style = MaterialTheme.typography.bodySmall,
@@ -87,6 +128,22 @@ private fun PlantDetail(plant: Plant) {
         title = plant.name,
         subtitle = plant.latinName
     ) {
+        if (!plant.inOfficialList) {
+            Surface(
+                color = Color(0xFFFFF3E0),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    "Внимание: растение НЕ входит в перечень Постановлений № 1002 и № 934. По ст. 231 УК РФ не квалифицируется. Может фигурировать по ст. 234 (ядовитые/сильнодействующие) или как сырьё для кустарного изготовления.",
+                    modifier = Modifier.padding(10.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF5D4037)
+                )
+            }
+            Spacer(Modifier.height(10.dp))
+        }
+
         Text(
             "Внешний вид",
             style = MaterialTheme.typography.titleSmall,
@@ -101,16 +158,31 @@ private fun PlantDetail(plant: Plant) {
         )
     }
 
-    GreenSectionCard(title = "Размеры (Постановление № 1002)") {
-        PlantSizeRow("Значительный", formatMass(plant.significant))
-        PlantSizeRow("Крупный", formatMass(plant.large))
-        PlantSizeRow("Особо крупный", formatMass(plant.extraLarge))
-        Spacer(Modifier.height(8.dp))
-        Text(
-            "Значительный и крупный размеры применяются для ст. 231 УК РФ (культивирование). Масса определяется после высушивания до постоянной массы при +110…+115 °C.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+    if (plant.inOfficialList && plant.significant > 0.0) {
+        GreenSectionCard(title = "Масса (Постановление № 1002)") {
+            PlantSizeRow("Значительный", formatMass(plant.significant))
+            PlantSizeRow("Крупный", formatMass(plant.large))
+            PlantSizeRow("Особо крупный", formatMass(plant.extraLarge))
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Масса определяется после высушивания до постоянной массы при +110…+115 °C. Применяется для ст. 228, 228.1, 229, 229.1 УК РФ.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+
+    if (plant.hasCultivationLimits) {
+        GreenSectionCard(title = "Культивирование (ст. 231 УК РФ)") {
+            PlantSizeRow("Крупный размер", "от ${plant.cultivationLarge} ${plant.cultivationUnit}")
+            PlantSizeRow("Особо крупный размер", "от ${plant.cultivationExtraLarge} ${plant.cultivationUnit}")
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Размер определяется независимо от фазы развития растений. Установлено Постановлением № 934 от 27.11.2010.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 
     GreenSectionCard(title = "Подсказки по фиксации и изъятию") {
@@ -157,6 +229,7 @@ private fun PlantSizeRow(label: String, value: String) {
 
 private fun formatMass(grams: Double): String {
     return when {
+        grams <= 0.0 -> "—"
         grams >= 1000 -> "${grams / 1000.0} кг"
         grams >= 1 -> "$grams г"
         grams >= 0.001 -> "${grams * 1000} мг"
