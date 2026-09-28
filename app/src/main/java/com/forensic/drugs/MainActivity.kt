@@ -41,10 +41,10 @@ fun MainScreen() {
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf(
         TabItem("Поиск", Icons.Filled.Search),
-        TabItem("Размер", Icons.Filled.Scale),
-        TabItem("Статьи", Icons.Filled.Gavel),
-        TabItem("Растения", Icons.Filled.LocalFlorist),
-        TabItem("Подсказки", Icons.Filled.Checklist)
+        TabItem("Размер", Icons.Filled.Info),
+        TabItem("Статьи", Icons.Filled.Menu),
+        TabItem("Растения", Icons.Filled.Favorite),
+        TabItem("Подсказки", Icons.Filled.Check)
     )
 
     Scaffold(
