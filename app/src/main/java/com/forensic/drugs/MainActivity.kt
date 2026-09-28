@@ -14,11 +14,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.forensic.drugs.ui.screens.ArticlesScreen
+import com.forensic.drugs.ui.screens.HintsScreen
 import com.forensic.drugs.ui.screens.PlantsScreen
 import com.forensic.drugs.ui.screens.SearchScreen
 import com.forensic.drugs.ui.screens.SizeScreen
 import com.forensic.drugs.ui.theme.ForensicDrugsTheme
-import com.forensic.drugs.ui.theme.GreenSectionCard
 
 data class TabItem(val title: String, val icon: ImageVector)
 
@@ -96,27 +96,8 @@ fun MainScreen() {
                 1 -> SizeScreen()
                 2 -> ArticlesScreen()
                 3 -> PlantsScreen()
-                4 -> PlaceholderScreen("Подсказки по расследованию", "Чек-листы по осмотру, обыску, допросу, экспертизам")
+                4 -> HintsScreen()
             }
-        }
-    }
-}
-
-@Composable
-fun PlaceholderScreen(title: String, description: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-    ) {
-        GreenSectionCard(title = title, subtitle = description) {
-            Text(
-                "Раздел в разработке. Скоро здесь появится рабочий инструмент.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
         }
     }
 }
