@@ -5,7 +5,6 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,7 +23,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
-    // Анимации
     val stopAlpha = remember { Animatable(0f) }
     val stopScale = remember { Animatable(0.7f) }
     val wordAlpha = remember { Animatable(0f) }
@@ -31,16 +30,13 @@ fun SplashScreen(onFinished: () -> Unit) {
     val screenAlpha = remember { Animatable(1f) }
 
     LaunchedEffect(Unit) {
-        // Появление STOP
         stopAlpha.animateTo(1f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
         stopScale.animateTo(1f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
 
-        // Появление "наркотик"
         delay(200)
         wordAlpha.animateTo(1f, animationSpec = tween(800, easing = LinearOutSlowInEasing))
         wordOffset.animateTo(0f, animationSpec = tween(800, easing = LinearOutSlowInEasing))
 
-        // Пауза и плавный выход
         delay(700)
         screenAlpha.animateTo(0f, animationSpec = tween(400))
         onFinished()
@@ -65,7 +61,6 @@ fun SplashScreen(onFinished: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // STOP — красный, крупный
             Text(
                 text = "STOP",
                 color = Color(0xFFE53935),
@@ -75,12 +70,11 @@ fun SplashScreen(onFinished: () -> Unit) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .alpha(stopAlpha.value)
-                    .graphicsLayerScale(stopScale.value)
+                    .graphicsLayer(scaleX = stopScale.value, scaleY = stopScale.value)
             )
 
             Spacer(Modifier.height(4.dp))
 
-            // наркотик — маленькими, белым
             Text(
                 text = "наркотик",
                 color = Color.White,
@@ -90,12 +84,11 @@ fun SplashScreen(onFinished: () -> Unit) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .alpha(wordAlpha.value)
-                    .graphicsLayerTranslationY(wordOffset.value)
+                    .graphicsLayer(translationY = wordOffset.value)
             )
 
             Spacer(Modifier.height(60.dp))
 
-            // Подпись внизу
             Text(
                 text = "справочник следователя",
                 color = Color.White.copy(alpha = wordAlpha.value * 0.5f),
@@ -107,12 +100,3 @@ fun SplashScreen(onFinished: () -> Unit) {
         }
     }
 }
-
-// Вспомогательные модификаторы для анимации
-private fun Modifier.graphicsLayerScale(scale: Float) = this.then(
-    androidx.compose.ui.graphics.graphicsLayer(scaleX = scale, scaleY = scale)
-)
-
-private fun Modifier.graphicsLayerTranslationY(offset: Float) = this.then(
-    androidx.compose.ui.graphics.graphicsLayer(translationY = offset)
-)
