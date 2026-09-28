@@ -8,12 +8,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.forensic.drugs.ui.screens.SizeScreen
 import com.forensic.drugs.ui.theme.ForensicDrugsTheme
 import com.forensic.drugs.ui.theme.GreenSectionCard
 
@@ -90,7 +90,7 @@ fun MainScreen() {
         ) {
             when (selectedTab) {
                 0 -> PlaceholderScreen("Поиск вещества", "Введите название, формулу или описание — поиск по перечням №681, №964, №1002")
-                1 -> PlaceholderScreen("Квалификация по размеру", "Калькулятор массы по Постановлению №76. Значительный, крупный, особо крупный")
+                1 -> SizeScreen()
                 2 -> PlaceholderScreen("Статьи УК РФ", "Ст. 228–234: санкции, подсказки, разграничение составов")
                 3 -> PlaceholderScreen("Запрещённые растения", "Перечень растений и расчёт размера культивирования (ст. 231)")
                 4 -> PlaceholderScreen("Подсказки по расследованию", "Чек-листы по осмотру, обыску, допросу, экспертизам")
@@ -106,7 +106,7 @@ fun PlaceholderScreen(title: String, description: String) {
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
     ) {
         GreenSectionCard(title = title, subtitle = description) {
             Text(
