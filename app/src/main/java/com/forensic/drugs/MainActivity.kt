@@ -18,6 +18,7 @@ import com.forensic.drugs.ui.screens.HintsScreen
 import com.forensic.drugs.ui.screens.PlantsScreen
 import com.forensic.drugs.ui.screens.SearchScreen
 import com.forensic.drugs.ui.screens.SizeScreen
+import com.forensic.drugs.ui.screens.SplashScreen
 import com.forensic.drugs.ui.theme.ForensicDrugsTheme
 
 data class TabItem(val title: String, val icon: ImageVector)
@@ -31,7 +32,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    var showSplash by remember { mutableStateOf(true) }
+
+                    if (showSplash) {
+                        SplashScreen(onFinished = { showSplash = false })
+                    } else {
+                        MainScreen()
+                    }
                 }
             }
         }
@@ -55,7 +62,7 @@ fun MainScreen() {
             TopAppBar(
                 title = {
                     Text(
-                        "УК РФ 228–234",
+                        "STOP наркотик",
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
