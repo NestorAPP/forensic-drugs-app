@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Раскрытая книга — две страницы -->
+    <!-- Левая страница -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,38 C48,35 40,34 34,35 L34,72 C40,71 48,72 54,75 Z" />
+    <!-- Правая страница -->
+    <path
+        android:fillColor="#F5F7FA"
+        android:pathData="M54,38 C60,35 68,34 74,35 L74,72 C68,71 60,72 54,75 Z" />
+    <!-- Корешок книги -->
+    <path
+        android:fillColor="#D9DEE7"
+        android:pathData="M53,38 L55,38 L55,75 L53,75 Z" />
+
+    <!-- Строки текста на левой странице -->
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M38,44 L50,44 L50,45.5 L38,45.5 Z" />
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M38,49 L50,49 L50,50.5 L38,50.5 Z" />
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M38,54 L50,54 L50,55.5 L38,55.5 Z" />
+
+    <!-- Строки текста на правой странице -->
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M58,44 L70,44 L70,45.5 L58,45.5 Z" />
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M58,49 L70,49 L70,50.5 L58,50.5 Z" />
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M58,54 L70,54 L70,55.5 L58,55.5 Z" />
+
+    <!-- Трёхцветная закладка сверху книги -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,30 L48,40 L50,38 L52,40 L52,30 Z" />
+    <path
+        android:fillColor="#0039A6"
+        android:pathData="M50,30 L50,38 L52,40 L52,30 Z" />
+    <path
+        android:fillColor="#D52B1E"
+        android:pathData="M52,30 L52,36 L53,35 L54,36 L54,30 Z" />
+
+    <!-- Красная лупа поверх правой страницы -->
+    <!-- Ручка лупы -->
+    <path
+        android:fillColor="#D52B1E"
+        android:pathData="M66,60 L72,66 L70,68 L64,62 Z" />
+    <!-- Круг лупы -->
+    <path
+        android:strokeColor="#D52B1E"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000"
+        android:pathData="M62,58 m-8,0 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0" />
+    <!-- Стекло лупы — полупрозрачное -->
+    <path
+        android:fillColor="#E3EBF7"
+        android:fillAlpha="0.5"
+        android:pathData="M62,58 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+</vector>
