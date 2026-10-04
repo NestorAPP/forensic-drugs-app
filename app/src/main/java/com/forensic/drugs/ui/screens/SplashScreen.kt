@@ -5,7 +5,6 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,8 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -27,41 +24,40 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
     // Анимации
-    val stampScale = remember { Animatable(3.5f) }
-    val stampAlpha = remember { Animatable(0.3f) }
-    val stopShake = remember { Animatable(0f) }
-    val waveScale = remember { Animatable(0.5f) }
-    val waveAlpha = remember { Animatable(0.9f) }
-    val wordAlpha = remember { Animatable(0f) }
-    val wordOffset = remember { Animatable(30f) }
+    val flagAlpha = remember { Animatable(0f) }
+    val flagOffset = remember { Animatable(-60f) }
+    val vpsAlpha = remember { Animatable(0f) }
+    val vpsScale = remember { Animatable(0.6f) }
+    val narcoAlpha = remember { Animatable(0f) }
+    val narcoOffset = remember { Animatable(40f) }
+    val subtitleAlpha = remember { Animatable(0f) }
+    val stripeProgress = remember { Animatable(0f) }
     val screenAlpha = remember { Animatable(1f) }
 
     LaunchedEffect(Unit) {
-        // 1. Печать "падает" — уменьшается от 3.5x до 1x с ускорением
-        stampScale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(durationMillis = 350, easing = LinearOutSlowInEasing)
-        )
-        stampAlpha.animateTo(1f, animationSpec = tween(150))
+        // 1. Флаг опускается сверху
+        flagAlpha.animateTo(1f, animationSpec = tween(400, easing = LinearOutSlowInEasing))
+        flagOffset.animateTo(0f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
 
-        // 2. Лёгкий отскок/дрожь после удара
-        stopShake.animateTo(8f, animationSpec = tween(40))
-        stopShake.animateTo(-6f, animationSpec = tween(40))
-        stopShake.animateTo(4f, animationSpec = tween(40))
-        stopShake.animateTo(-2f, animationSpec = tween(40))
-        stopShake.animateTo(0f, animationSpec = tween(40))
-
-        // 3. Волна после удара
-        waveAlpha.animateTo(0f, animationSpec = tween(600))
-        waveScale.animateTo(2.5f, animationSpec = tween(600))
-
-        // 4. Всплытие слова "наркотик"
+        // 2. ВПС появляется с масштабированием
         delay(150)
-        wordAlpha.animateTo(1f, animationSpec = tween(700, easing = LinearOutSlowInEasing))
-        wordOffset.animateTo(0f, animationSpec = tween(700, easing = LinearOutSlowInEasing))
+        vpsAlpha.animateTo(1f, animationSpec = tween(400))
+        vpsScale.animateTo(1f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
 
-        // 5. Пауза и переход
-        delay(700)
+        // 3. Нарко всплывает снизу
+        delay(200)
+        narcoAlpha.animateTo(1f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
+        narcoOffset.animateTo(0f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
+
+        // 4. Подпись
+        delay(150)
+        subtitleAlpha.animateTo(1f, animationSpec = tween(400))
+
+        // 5. Трёхцветная полоса заполняется
+        stripeProgress.animateTo(1f, animationSpec = tween(500, easing = LinearOutSlowInEasing))
+
+        // 6. Пауза и переход
+        delay(400)
         screenAlpha.animateTo(0f, animationSpec = tween(400))
         onFinished()
     }
@@ -73,72 +69,138 @@ fun SplashScreen(onFinished: () -> Unit) {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF0D3B12),
-                        Color(0xFF1B5E20),
-                        Color(0xFF0D3B12)
+                        Color(0xFF00246B),
+                        Color(0xFF0039A6),
+                        Color(0xFF00246B)
                     )
                 )
             ),
         contentAlignment = Alignment.Center
     ) {
         Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Волна (кольцо, расширяется после удара)
-            Box(
+            // Мини-флаг РФ
+            FlagMini(
                 modifier = Modifier
-                    .size(200.dp)
-                    .scale(waveScale.value)
-                    .alpha(waveAlpha.value)
-                    .clip(CircleShape)
-                    .background(Color(0xFFE53935).copy(alpha = 0.15f))
+                    .alpha(flagAlpha.value)
+                    .graphicsLayer(translationY = flagOffset.value)
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(28.dp))
 
-            // STOP — печать, падает и впечатывается
+            // ВПС — крупно, белым
             Text(
-                text = "STOP",
-                color = Color(0xFFE53935),
-                fontSize = 76.sp,
+                text = "ВПС",
+                color = Color.White,
+                fontSize = 72.sp,
                 fontWeight = FontWeight.Black,
                 letterSpacing = 8.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .alpha(stampAlpha.value)
-                    .graphicsLayer(
-                        scaleX = stampScale.value,
-                        scaleY = stampScale.value,
-                        translationX = stopShake.value
-                    )
+                    .alpha(vpsAlpha.value)
+                    .graphicsLayer(scaleX = vpsScale.value, scaleY = vpsScale.value)
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            // Нарко — красным, всплывает
+            Text(
+                text = "Нарко",
+                color = Color(0xFFD52B1E),
+                fontSize = 34.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 10.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .alpha(narcoAlpha.value)
+                    .graphicsLayer(translationY = narcoOffset.value)
+            )
+
+            Spacer(Modifier.height(40.dp))
+
+            // Подпись
+            Text(
+                text = "виртуальный помощник следователя",
+                color = Color.White.copy(alpha = subtitleAlpha.value * 0.85f),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Light,
+                letterSpacing = 3.sp,
+                textAlign = TextAlign.Center
             )
 
             Spacer(Modifier.height(6.dp))
 
-            // наркотик — всплывает снизу
             Text(
-                text = "наркотик",
-                color = Color.White,
-                fontSize = 22.sp,
+                text = "в сфере противодействия наркопреступлениям",
+                color = Color.White.copy(alpha = subtitleAlpha.value * 0.6f),
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Light,
-                letterSpacing = 10.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .alpha(wordAlpha.value)
-                    .graphicsLayer(translationY = wordOffset.value)
-            )
-
-            Spacer(Modifier.height(60.dp))
-
-            Text(
-                text = "справочник следователя",
-                color = Color.White.copy(alpha = wordAlpha.value * 0.5f),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal,
-                letterSpacing = 3.sp,
+                letterSpacing = 2.sp,
                 textAlign = TextAlign.Center
             )
         }
+
+        // Трёхцветная полоса внизу
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(6.dp)
+        ) {
+            Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.33f)
+                        .alpha(stripeProgress.value)
+                        .background(Color.White)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.33f)
+                        .alpha(stripeProgress.value)
+                        .background(Color(0xFF0039A6))
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(0.34f)
+                        .alpha(stripeProgress.value)
+                        .background(Color(0xFFD52B1E))
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FlagMini(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .width(96.dp)
+            .height(64.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color.White)
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color(0xFF0039A6))
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(Color(0xFFD52B1E))
+        )
     }
 }
