@@ -3,6 +3,7 @@ package com.forensic.drugs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -11,29 +12,40 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.forensic.drugs.ui.screens.ArticlesScreen
 import com.forensic.drugs.ui.screens.HintsScreen
 import com.forensic.drugs.ui.screens.PlantsScreen
 import com.forensic.drugs.ui.screens.SearchScreen
+import com.forensic.drugs.ui.screens.SettingsScreen
 import com.forensic.drugs.ui.screens.SizeScreen
 import com.forensic.drugs.ui.screens.SplashScreen
+import com.forensic.drugs.ui.theme.AppThemeMode
 import com.forensic.drugs.ui.theme.ForensicDrugsTheme
+import com.forensic.drugs.ui.theme.ThemePreference
 
 data class TabItem(val title: String, val icon: ImageVector)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemePreference.load(this)
+
         setContent {
-            ForensicDrugsTheme {
+            val dark = when (ThemePreference.current) {
+                AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+                AppThemeMode.LIGHT -> false
+                AppThemeMode.DARK -> true
+            }
+
+            ForensicDrugsTheme(darkTheme = dark) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     var showSplash by remember { mutableStateOf(true) }
-
                     if (showSplash) {
                         SplashScreen(onFinished = { showSplash = false })
                     } else {
@@ -61,11 +73,24 @@ fun MainScreen() {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "STOP наркотик",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                        FlagStripe()
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            "STOP наркотик",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { selectedTab = 5 }) {
+                        Icon(
+                            Icons.Filled.Settings,
+                            contentDescription = "Настройки",
+                            tint = Color.White
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -104,7 +129,39 @@ fun MainScreen() {
                 2 -> ArticlesScreen()
                 3 -> PlantsScreen()
                 4 -> HintsScreen()
+                5 -> SettingsScreen()
             }
+        }
+    }
+}
+
+@Composable
+private fun FlagStripe() {
+    // Мини-флаг РФ: белая, синяя, красная полосы
+    Row(
+        modifier = Modifier
+            .width(24.dp)
+            .height(16.dp)
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(Color.White)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(Color(0xFF0039A6))
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .background(Color(0xFFD52B1E))
+            )
         }
     }
 }
