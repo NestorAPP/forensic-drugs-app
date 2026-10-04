@@ -78,7 +78,7 @@ fun MainScreen() {
                         FlagStripe()
                         Spacer(Modifier.width(10.dp))
                         Text(
-                            "STOP наркотик",
+                            "ВПС Нарко",
                             color = Color.White,
                             fontWeight = FontWeight.Bold
                         )
