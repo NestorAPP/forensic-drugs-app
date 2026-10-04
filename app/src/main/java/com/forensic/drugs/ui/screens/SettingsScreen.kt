@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -124,7 +123,7 @@ fun AboutScreen(onBack: () -> Unit) {
     ) {
         GreenHeader(
             title = "О приложении",
-            subtitle = "STOP наркотик"
+            subtitle = "ВПС Нарко"
         )
 
         Spacer(Modifier.height(8.dp))
@@ -138,14 +137,14 @@ fun AboutScreen(onBack: () -> Unit) {
 
         GreenSectionCard(title = "Наименование") {
             Text(
-                "STOP наркотик",
+                "ВПС Нарко",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                "Справочник следователя по ст. 228–234 УК РФ",
+                "Виртуальный помощник следователя в сфере противодействия наркопреступлениям",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
