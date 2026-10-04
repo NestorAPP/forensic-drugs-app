@@ -12,31 +12,43 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val LightColors = lightColorScheme(
-    primary = GreenPrimary,
-    onPrimary = GreenOnPrimary,
-    primaryContainer = GreenAccent,
-    onPrimaryContainer = GreenPrimaryDark,
-    secondary = GreenLight,
-    onSecondary = GreenOnPrimary,
-    background = GreenBackground,
-    onBackground = GreenOnBackground,
-    surface = GreenSurface,
-    onSurface = GreenOnBackground,
-    surfaceVariant = GreenAccent,
-    onSurfaceVariant = GreenPrimaryDark
+    primary = FlagBlue,
+    onPrimary = FlagWhite,
+    primaryContainer = FlagBlueSoft,
+    onPrimaryContainer = FlagBlueDark,
+    secondary = FlagRed,
+    onSecondary = FlagWhite,
+    secondaryContainer = FlagRedSoft,
+    onSecondaryContainer = FlagRedDark,
+    tertiary = FlagBlueLight,
+    onTertiary = FlagWhite,
+    background = BackgroundLight,
+    onBackground = TextDark,
+    surface = SurfaceLight,
+    onSurface = TextDark,
+    surfaceVariant = FlagWhiteSoft,
+    onSurfaceVariant = TextGrey,
+    outline = FlagBlue.copy(alpha = 0.3f)
 )
 
 private val DarkColors = darkColorScheme(
-    primary = GreenDarkPrimary,
-    onPrimary = GreenPrimaryDark,
-    primaryContainer = GreenPrimary,
-    onPrimaryContainer = GreenAccent,
-    secondary = GreenAccent,
-    onSecondary = GreenPrimaryDark,
-    background = GreenDarkBackground,
-    onBackground = GreenAccent,
-    surface = GreenDarkSurface,
-    onSurface = GreenAccent
+    primary = FlagBlueLight,
+    onPrimary = FlagWhite,
+    primaryContainer = FlagBlueDark,
+    onPrimaryContainer = FlagWhite,
+    secondary = FlagRedLight,
+    onSecondary = FlagWhite,
+    secondaryContainer = FlagRedDark,
+    onSecondaryContainer = FlagWhite,
+    tertiary = FlagBlue,
+    onTertiary = FlagWhite,
+    background = DarkBackground,
+    onBackground = DarkText,
+    surface = DarkSurface,
+    onSurface = DarkText,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = DarkTextMuted,
+    outline = FlagBlueLight.copy(alpha = 0.4f)
 )
 
 @Composable
